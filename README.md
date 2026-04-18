@@ -4,7 +4,7 @@ Este proyecto consiste en la implementación de pruebas de API utilizando Postma
 
 El objetivo es validar el comportamiento de distintos endpoints REST mediante la ejecución de operaciones CRUD (Create, Read, Update, Delete), aplicando buenas prácticas de testing y automatización de validaciones.
 
-Se busca simular un entorno real de trabajo QA enfocado en pruebas de backend.
+Además, se incorporó la ejecución automatizada mediante Newman, permitiendo correr las pruebas desde línea de comandos y generar reportes, simulando un entorno real de integración continua (CI).
 
 ---
 
@@ -19,16 +19,18 @@ Se realizaron pruebas sobre los siguientes módulos de la API:
 
 Para cada uno de ellos se cubren las operaciones principales:
 
-* GET → obtención de datos
-* POST → creación de recursos
-* PUT → actualización de información
-* DELETE → eliminación de recursos
+* GET → obtención de datos 
+* POST → creación de recursos 
+* PUT → actualización de información 
+* DELETE → eliminación de recursos 
 
 ---
 
-## Herramienta utilizada
+## Herramientas utilizadas
 
-* Postman – testing de APIs y automatización de validaciones mediante scripts
+* Postman – testing de APIs y automatización de validaciones 
+* Newman – ejecución automatizada de colecciones 
+* Newman HTML Reporter – generación de reportes visuales 
 
 ---
 
@@ -36,75 +38,63 @@ Para cada uno de ellos se cubren las operaciones principales:
 
 ```bash
 .
-├── collections        → colección de requests organizada por módulos
-├── environment        → variables de entorno (URL base)
-└── README.md
-```
+├── postman
+│   ├── collections        → colección organizada por módulos
+│   └── enviroment         → variables de entorno
+├── newman
+│   ├── run.sh             → script de ejecución automatizada
+│   ├── report.html        → reporte generado
+│   └── inform.md          → resultados de ejecución
+├── README.md
 
----
 
-## Estrategia de testing
+strategia de testing
 
-Se aplicó una estrategia basada en validaciones automáticas dentro de Postman, utilizando scripts en la pestaña **Tests** para cada request.
+Se aplicó una estrategia basada en validaciones automáticas dentro de Postman, utilizando scripts en la pestaña Tests para cada request.
 
-### Validaciones implementadas
-
-* códigos de estado HTTP (200, 201, 204)
-* formato de respuesta (JSON)
-* estructura de los objetos
-* existencia de atributos obligatorios
-* consistencia de datos enviados vs recibidos
-* tiempos de respuesta (< 2000 ms)
-* validación de eliminación lógica (`isDeleted`)
-
----
-
-## Cobertura funcional
+Validaciones implementadas
+códigos de estado HTTP (200, 201, 204)
+formato de respuesta (JSON)
+estructura de los objetos
+existencia de atributos obligatorios
+consistencia de datos enviados vs recibidos
+tiempos de respuesta (< 2000 ms)
+validación de eliminación lógica (isDeleted)
+Cobertura funcional
 
 El proyecto cubre escenarios como:
 
-* obtención de listas de recursos
-* consulta de elementos individuales
-* creación de nuevos registros
-* actualización de datos existentes
-* eliminación de recursos
-* validación de estructuras complejas (ej: carritos con productos)
+obtención de listas de recursos
+consulta de elementos individuales
+creación de nuevos registros
+actualización de datos existentes
+eliminación de recursos
+validación de estructuras complejas (ej: carritos con productos)
+Ejecución con Postman
+Importar la colección desde /postman/collections
+Importar el environment desde /postman/enviroment
+Configurar la variable UrlBase (ej: https://dummyjson.com
+)
+Ejecutar los requests o la colección completa
 
----
+## Reporte
 
-## Ejecución
+# Luego de la ejecución se genera:
 
-1. Importar la colección desde `/collections`
-2. Importar el environment desde `/environment`
-3. Configurar la variable `UrlBase` (ej: https://dummyjson.com)
-4. Ejecutar los requests o la colección completa desde Postman
+newman/report.html
 
----
+Este archivo contiene:
 
-## Buenas prácticas aplicadas
+resumen de ejecución
+requests ejecutadas
+tests pasados y fallidos
+tiempos de respuesta
+Conclusión
 
-* uso de variables de entorno para evitar hardcodeo
-* organización modular por recurso
-* validaciones automatizadas en cada request
-* verificación de performance básica
-* cobertura de flujo CRUD completo
+- La API evaluada presenta un comportamiento consistente y estable en las operaciones principales.
 
----
+- Los endpoints responden correctamente a las solicitudes realizadas, manteniendo una estructura de datos predecible y tiempos de respuesta adecuados.
 
-## Conclusión
+- La incorporación de Newman permite automatizar la ejecución de pruebas y generar reportes, acercando el proyecto a un entorno real de trabajo con integración continua.
 
-La API evaluada presenta un comportamiento consistente y estable en las operaciones principales.
-
-Los endpoints responden correctamente a las solicitudes realizadas, manteniendo una estructura de datos predecible y tiempos de respuesta adecuados.
-
-El proyecto demuestra la correcta aplicación de pruebas de API utilizando Postman, cubriendo tanto validaciones funcionales como técnicas, y dejando una base reutilizable para futuros escenarios de testing.
-
----
-
-## Estado del proyecto
-
-✔ Colección completa
-✔ Environment configurado
-✔ Validaciones automatizadas
-✔ Cobertura CRUD implementada
-✔ Estructura organizada y reutilizable
+- El proyecto demuestra competencias en testing de APIs tanto manual como automatizado, incluyendo validaciones funcionales, técnicas y ejecución desde línea de comandos.
