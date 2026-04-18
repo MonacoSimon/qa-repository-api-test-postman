@@ -1,0 +1,1101 @@
+{
+  "info": {
+    "_postman_id": "e00398a1-6ec0-49c9-b71a-07080e94d4d5",
+    "name": "coleccion pruebas ReqRes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53286456",
+    "_collection_link": "https://go.postman.co/collection/53286456-e00398a1-6ec0-49c9-b71a-07080e94d4d5?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "get current products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\", function(){",
+                  "pm.response.to.have.status(200);",
+                  "})",
+                  "",
+                  "pm.test(\"respuesta es json\", function(){",
+                  "pm.response.to.be.json;",
+                  "})",
+                  "",
+                  "pm.test(\"Contiene formulario de reset\", function () {",
+                  "pm.expect(pm.response.text()).to.include(\"products\");",
+                  "});",
+                  "",
+                  "pm.test(\"Hay al menos un producto\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.products.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test(\"Los productos tienen campos esperados\", function () {",
+                  "    let product = pm.response.json().products[0];",
+                  "",
+                  "    pm.expect(product).to.have.property(\"id\");",
+                  "    pm.expect(product).to.have.property(\"title\");",
+                  "    pm.expect(product).to.have.property(\"price\");",
+                  "});",
+                  "",
+                  "pm.test(\"La respuesta incluye paginación\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData).to.have.property(\"total\");",
+                  "    pm.expect(jsonData).to.have.property(\"limit\");",
+                  "    pm.expect(jsonData).to.have.property(\"skip\");",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{UrlBase}}/products",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get a single product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Tiempo de respuesta aceptable\", function () {",
+                  "pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "pm.test(\"respuesta es json\", function(){",
+                  "pm.response.to.be.json;",
+                  "})",
+                  "",
+                  "pm.test(\"Los productos tienen campos esperados\", function () {",
+                  "    let product = pm.response.json()",
+                  "",
+                  "    pm.expect(product).to.have.property(\"id\");",
+                  "    pm.expect(product).to.have.property(\"title\");",
+                  "    pm.expect(product).to.have.property(\"price\");",
+                  "});",
+                  "",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{UrlBase}}/products/8",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "products",
+                "8"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "product categories",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Tiempo de respuesta aceptable\", function () {",
+                  "pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "pm.test(\"respuesta es json\", function(){",
+                  "pm.response.to.be.json;",
+                  "})",
+                  "",
+                  "pm.test(\"La respuesta no está vacía\", function () {",
+                  "pm.expect(pm.response.text().length).to.be.above(0);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{UrlBase}}/products/categories",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "products",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "add product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code es 200 o 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test(\"El producto creado tiene los datos enviados\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData.title).to.eql(\"BMW pencil\");",
+                  "});",
+                  "",
+                  "pm.test(\"Se genera un ID\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData.id).to.exist;",
+                  "});",
+                  "",
+                  "pm.test(\"Tiempo de respuesta aceptable\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "title",
+                  "value": "BMW pencil",
+                  "type": "text",
+                  "uuid": "2b9c246f-9912-48a7-a628-b02d6514ec68"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{UrlBase}}/products/add",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "products",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete a product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code es 200 o 201\", function () {",
+                  "pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test(\"Tiempo de respuesta aceptable\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta válida\", function () {",
+                  "    pm.expect(pm.response.text()).to.not.be.empty;",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{UrlBase}}/posts/1",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "get a single user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\", function(){",
+                  "pm.response.to.have.status(200);",
+                  "})",
+                  "",
+                  "pm.test(\"respuesta es json\", function(){",
+                  "pm.response.to.be.json;",
+                  "})",
+                  "",
+                  "pm.test(\"Hay al menos un usuario\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an(\"object\");",
+                  "    pm.expect(jsonData.id).to.exist;",
+                  "});",
+                  "",
+                  "pm.test(\"Los usuarios tienen campos esperados\", function () {",
+                  "    let user = pm.response.json();",
+                  "",
+                  "    pm.expect(user).to.have.property(\"username\");",
+                  "    pm.expect(user).to.have.property(\"email\");",
+                  "    pm.expect(user).to.have.property(\"age\");",
+                  "});",
+                  "",
+                  "pm.test(\"La respuesta incluye paginación\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData).to.have.property(\"email\");",
+                  "    pm.expect(jsonData).to.have.property(\"age\");",
+                  "    pm.expect(jsonData).to.have.property(\"username\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{UrlBase}}/users/1",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "add a user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code es 200 o 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test(\"El usuario creado tiene los datos enviados\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData.title).to.eql(\"BMW pencil\");",
+                  "});",
+                  "",
+                  "pm.test(\"Se genera un ID\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData.id).to.exist;",
+                  "});",
+                  "",
+                  "pm.test(\"Tiempo de respuesta aceptable\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "firstName",
+                  "value": "simon",
+                  "type": "text",
+                  "uuid": "2f854db5-ffc8-41ce-b515-4cd2b643ac26"
+                },
+                {
+                  "key": "lastName",
+                  "value": "ovi",
+                  "type": "text",
+                  "uuid": "82501666-545b-4bdf-9953-415d6a43ab52"
+                },
+                {
+                  "key": "age",
+                  "value": "25",
+                  "type": "text",
+                  "uuid": "d5356c5e-0834-4acc-9fdf-d391d07f9ad1"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{UrlBase}}/users/add",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "users",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status correcto\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});",
+                  "",
+                  "pm.test(\"El usuario fue actualizado\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.firstName).to.eql('Simon');",
+                  "});",
+                  "",
+                  "pm.test(\"El usuario tiene ID\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "lastName",
+                  "value": "Owais",
+                  "type": "text",
+                  "uuid": "007a2f38-6855-4b27-a39d-081614b3e8e0"
+                },
+                {
+                  "key": "firstName",
+                  "value": "Simon",
+                  "type": "text",
+                  "uuid": "1fe92d6d-8139-4125-b4ed-76025b3ad685"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{UrlBase}}/users/2",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code es 200 o 201\", function () {",
+                  "pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test(\"Tiempo de respuesta aceptable\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta válida\", function () {",
+                  "    pm.expect(pm.response.text()).to.not.be.empty;",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{UrlBase}}/users/3",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "users",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Carts",
+      "item": [
+        {
+          "name": "get all carts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\", function(){",
+                  "pm.response.to.have.status(200);",
+                  "})",
+                  "",
+                  "pm.test(\"respuesta es json\", function(){",
+                  "pm.response.to.be.json;",
+                  "})",
+                  "",
+                  "pm.test(\"Contiene formulario de reset\", function () {",
+                  "pm.expect(pm.response.text()).to.include(\"products\");",
+                  "});",
+                  "",
+                  "pm.test(\"Hay al menos un carrito\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.carts.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test(\"Cada carrito tiene productos\", function () {",
+                  "    let cart = pm.response.json().carts[0];",
+                  "    pm.expect(cart.products).to.be.an(\"array\");",
+                  "});",
+                  "",
+                  "pm.test(\"Producto tiene campos requeridos\", function () {",
+                  "    let product = pm.response.json().carts[0].products[0];",
+                  "",
+                  "    pm.expect(product).to.have.property(\"id\");",
+                  "    pm.expect(product).to.have.property(\"title\");",
+                  "    pm.expect(product).to.have.property(\"price\");",
+                  "    pm.expect(product).to.have.property(\"quantity\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{UrlBase}}/carts",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "carts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get a single cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status code is 200\", function(){",
+                  "pm.response.to.have.status(200);",
+                  "})",
+                  "",
+                  "pm.test(\"respuesta es json\", function(){",
+                  "pm.response.to.be.json;",
+                  "})",
+                  "",
+                  "pm.test(\"Contiene formulario de reset\", function () {",
+                  "pm.expect(pm.response.text()).to.include(\"products\");",
+                  "});",
+                  "",
+                  "pm.test(\"El carrito tiene productos\", function () {",
+                  "    let cart = pm.response.json();",
+                  "    pm.expect(cart.products).to.be.an(\"array\");",
+                  "});",
+                  "",
+                  "pm.test(\"Producto tiene campos requeridos\", function () {",
+                  "    let product = pm.response.json().products[0];",
+                  "",
+                  "    pm.expect(product).to.have.property(\"id\");",
+                  "    pm.expect(product).to.have.property(\"title\");",
+                  "    pm.expect(product).to.have.property(\"price\");",
+                  "    pm.expect(product).to.have.property(\"quantity\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{UrlBase}}/carts/3",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "carts",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "add a cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Se creó el carrito\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData).to.have.property(\"id\");",
+                  "    pm.expect(jsonData.products).to.be.an(\"array\");",
+                  "});",
+                  "",
+                  "pm.test(\"UserId correcto\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData.userId).to.eql(1);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"products\": [\n    {\n      \"id\": 1,\n      \"quantity\": 2\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{UrlBase}}/carts/add",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "carts",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update a cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status correcto\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});",
+                  "",
+                  "pm.test(\"El carrito fue actualizado\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.total).to.eql(0);",
+                  "});",
+                  "",
+                  "pm.test(\"El carrito tiene ID\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "total",
+                  "value": "28",
+                  "type": "text",
+                  "uuid": "767a0916-21a2-4def-bd03-67826e333cae"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{UrlBase}}/carts/29",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "carts",
+                "29"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete a cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code es 200 o 201\", function () {",
+                  "pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test(\"Tiempo de respuesta aceptable\", function () {",
+                  "pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "pm.test(\"El carrito fue eliminado\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData).to.have.property(\"isDeleted\", true);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{UrlBase}}/carts/1",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "carts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Recipes",
+      "item": [
+        {
+          "name": "Get  all recipes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\", function(){",
+                  "pm.response.to.have.status(200);",
+                  "})",
+                  "",
+                  "pm.test(\"respuesta es json\", function(){",
+                  "pm.response.to.be.json;",
+                  "})",
+                  "",
+                  "pm.test(\"Contiene formulario de reset\", function () {",
+                  "pm.expect(pm.response.text()).to.include(\"recipes\");",
+                  "});",
+                  "",
+                  "pm.test(\"Hay al menos una receta\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.recipes.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test(\"Los productos tienen campos esperados\", function () {",
+                  "    let recipes = pm.response.json().recipes[0];",
+                  "",
+                  "    pm.expect(recipes).to.have.property(\"id\");",
+                  "    pm.expect(recipes).to.have.property(\"name\");",
+                  "    pm.expect(recipes).to.have.property(\"ingredients\");",
+                  "});",
+                  "",
+                  "pm.test(\"La respuesta incluye paginación\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData).to.have.property(\"total\");",
+                  "    pm.expect(jsonData).to.have.property(\"limit\");",
+                  "    pm.expect(jsonData).to.have.property(\"skip\");",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{UrlBase}}/recipes",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "recipes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get a single recipe",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\", function(){",
+                  "pm.response.to.have.status(200);",
+                  "})",
+                  "",
+                  "pm.test(\"respuesta es json\", function(){",
+                  "pm.response.to.be.json;",
+                  "})",
+                  "",
+                  "pm.test(\"Contiene formulario de reset\", function () {",
+                  "pm.expect(pm.response.text()).to.include(\"name\");",
+                  "});",
+                  "",
+                  "pm.test(\"Los productos tienen campos esperados\", function () {",
+                  "    let recipes = pm.response.json();",
+                  "",
+                  "    pm.expect(recipes).to.have.property(\"id\");",
+                  "    pm.expect(recipes).to.have.property(\"name\");",
+                  "    pm.expect(recipes).to.have.property(\"ingredients\");",
+                  "});",
+                  "",
+                  "pm.test(\"La respuesta incluye paginación\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData).to.have.property(\"instructions\");",
+                  "    pm.expect(jsonData).to.have.property(\"name\");",
+                  "    pm.expect(jsonData).to.have.property(\"ingredients\");",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{UrlBase}}/recipes/1",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "recipes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "add recipe",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code es 200 o 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test(\"La receta creada tiene los datos enviados\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData.name).to.eql(\"Pizza Neuquen\");",
+                  "});",
+                  "",
+                  "pm.test(\"Se genera un ID\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData.id).to.exist;",
+                  "});",
+                  "",
+                  "pm.test(\"Tiempo de respuesta aceptable\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Pizza Neuquen",
+                  "type": "text",
+                  "uuid": "f8cd91d3-553a-4bff-a3b1-31c7287508ca"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{UrlBase}}/recipes/add",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "recipes",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update recipe",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status correcto\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});",
+                  "",
+                  "pm.test(\"La receta fue actualizada\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.name).to.eql(\"brownie\");",
+                  "});",
+                  "",
+                  "pm.test(\"La receta tiene ID\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "brownie",
+                  "type": "text",
+                  "uuid": "62350107-3f9f-406f-b837-6c6ae4a0e354"
+                },
+                {
+                  "key": "difficulty",
+                  "value": "medium",
+                  "type": "text",
+                  "uuid": "dbbec970-6a1b-4647-ba26-cb63216fec03"
+                },
+                {
+                  "key": "cuisine",
+                  "value": "Argentinian",
+                  "type": "text",
+                  "uuid": "cd5861d4-1239-44be-9d4a-29227331baac"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{UrlBase}}/recipes/3",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "recipes",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete recipe",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code es 200 o 201\", function () {",
+                  "pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test(\"Tiempo de respuesta aceptable\", function () {",
+                  "pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "pm.test(\"La receta fue eliminada\", function () {",
+                  "    let jsonData = pm.response.json();",
+                  "",
+                  "    pm.expect(jsonData).to.have.property(\"isDeleted\", true);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{UrlBase}}/recipes/3",
+              "host": [
+                "{{UrlBase}}"
+              ],
+              "path": [
+                "recipes",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
