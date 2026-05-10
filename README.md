@@ -98,3 +98,77 @@ Conclusión
 - La incorporación de Newman permite automatizar la ejecución de pruebas y generar reportes, acercando el proyecto a un entorno real de trabajo con integración continua.
 
 - El proyecto demuestra competencias en testing de APIs tanto manual como automatizado, incluyendo validaciones funcionales, técnicas y ejecución desde línea de comandos.
+
+# Setup del Entorno
+
+El proyecto incluye un script `set-up.sh` para automatizar la preparación inicial del entorno de ejecución.
+
+## Funcionalidad del Script
+
+El script realiza las siguientes tareas:
+
+- Verifica que Node.js esté instalado
+- Verifica que npm esté instalado
+- Verifica si Newman está instalado
+- Instala Newman automáticamente en caso de no existir
+- Crea directorios necesarios para resultados
+- Asigna permisos de ejecución a los scripts del proyecto
+
+---
+
+# Dar Permisos de Ejecución
+
+Antes de ejecutar el script debe asignarse permiso de ejecución:
+
+```bash
+chmod +x set-up.sh
+```
+
+---
+
+# Ejecutar el Script
+
+```bash
+./set-up.sh
+```
+
+---
+
+# Resultado Esperado
+
+Si todo funciona correctamente, el script mostrará:
+
+```text
+Entorno listo
+```
+
+---
+
+# Ejecutar las Pruebas
+
+Una vez finalizado el setup:
+
+```bash
+cd newman
+./run.sh
+```
+
+---
+
+# Requisitos
+
+El proyecto requiere:
+
+- Node.js
+- npm
+- conexión a Internet para instalar Newman automáticamente
+
+---
+
+# Resultados Generados
+
+Los reportes y resultados se almacenan en:
+
+```text
+newman/results
+```
